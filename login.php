@@ -1,4 +1,5 @@
 <?php
+    session_start();
     if(isset($_POST['submit'])){
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -10,10 +11,9 @@
         if(array_key_exists($username,$db_data)){
             // check user password
             if($db_data[$username]['password']=== $password){
-                session_start();
                 $_SESSION['username'] = $db_data[$username]['username'];
                 $_SESSION['email'] = $db_data[$username]['email'];
-                $response = 'Welcome '.$_SESSION['username'];
+                $response = '';
             }else{
                 $response = 'Incorrect password';
             }
@@ -38,7 +38,7 @@
     </ul>
     <h4>Login</h4>
     <?php
-        if(session_id() == '' || !isset($_SESSION)) {
+        if(!isset($_SESSION['username'])) {
             // session isn't started
     ?>
             <form action="" method='post'>
@@ -48,7 +48,12 @@
             </form>
     <?php  
         }else{
-            echo ('<p>You are logged in.. </p>');
+            echo ('Welcome '.$_SESSION['username']);
+    ?>
+            <p>You are logged in.. </p>
+            <li><a href="reset_password.php">Reset Password</a></li>
+            <li><a href="logout.php">Logout</a></li>
+    <?php
         }
     ?>
 </body>
